@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/87839351ef1544b2894a9cdadbcfee1d/artifacts
+end_time: 1776958650742
+entry_point_name: ''
+experiment_id: '492954484090795591'
+lifecycle_stage: active
+run_id: 87839351ef1544b2894a9cdadbcfee1d
+run_name: LogisticRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776958643382
+status: 3
+tags: []
+user_id: aidara

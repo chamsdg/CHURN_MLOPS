@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/models/m-81af4bfe153a42b5be307e143c4888d9/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.14.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.11.1
+model_id: m-81af4bfe153a42b5be307e143c4888d9
+model_size_bytes: 36077028
+model_uuid: m-81af4bfe153a42b5be307e143c4888d9
+prompts: null
+run_id: 6cea5993d6d8416993cda38507e6c708
+utc_time_created: '2026-04-23 15:37:33.915368'

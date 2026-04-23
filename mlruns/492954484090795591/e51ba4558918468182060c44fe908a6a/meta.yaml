@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/e51ba4558918468182060c44fe908a6a/artifacts
+end_time: 1776958412088
+entry_point_name: ''
+experiment_id: '492954484090795591'
+lifecycle_stage: active
+run_id: e51ba4558918468182060c44fe908a6a
+run_name: XGBoost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776958401729
+status: 3
+tags: []
+user_id: aidara

@@ -1,0 +1,16 @@
+creation_timestamp: 1776958682996
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1776958682996
+model_id: m-536b1bb3bf3840b096e3dd0496dcfa27
+name: ChurnModel
+run_id: 0237eac4b31f4696a63eff3cff5852c5
+run_link: null
+source: models:/m-536b1bb3bf3840b096e3dd0496dcfa27
+status: READY
+status_message: null
+storage_location: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/models/m-536b1bb3bf3840b096e3dd0496dcfa27/artifacts
+user_id: null
+version: 1
+workspace: default

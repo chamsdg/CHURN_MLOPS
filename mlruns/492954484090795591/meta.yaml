@@ -1,0 +1,8 @@
+artifact_location: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591
+creation_time: 1776958384304
+experiment_id: '492954484090795591'
+last_update_time: 1776958384304
+lifecycle_stage: active
+name: churn_prediction
+trace_location: null
+workspace: default

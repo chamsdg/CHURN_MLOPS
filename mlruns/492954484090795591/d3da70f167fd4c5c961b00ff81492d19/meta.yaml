@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/d3da70f167fd4c5c961b00ff81492d19/artifacts
+end_time: 1776958420940
+entry_point_name: ''
+experiment_id: '492954484090795591'
+lifecycle_stage: active
+run_id: d3da70f167fd4c5c961b00ff81492d19
+run_name: LightGBM
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776958412108
+status: 3
+tags: []
+user_id: aidara

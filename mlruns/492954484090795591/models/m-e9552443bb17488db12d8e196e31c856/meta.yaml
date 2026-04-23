@@ -1,0 +1,10 @@
+artifact_location: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/models/m-e9552443bb17488db12d8e196e31c856/artifacts
+creation_timestamp: 1776958643643
+experiment_id: '492954484090795591'
+last_updated_timestamp: 1776958650732
+model_id: m-e9552443bb17488db12d8e196e31c856
+model_type: null
+name: model
+source_run_id: 87839351ef1544b2894a9cdadbcfee1d
+status: 2
+status_message: null

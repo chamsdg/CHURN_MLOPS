@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/a232bf00df184e469218c4b6d8b481b8/artifacts
+end_time: 1776960843722
+entry_point_name: ''
+experiment_id: '492954484090795591'
+lifecycle_stage: active
+run_id: a232bf00df184e469218c4b6d8b481b8
+run_name: RandomForest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776960830572
+status: 3
+tags: []
+user_id: aidara

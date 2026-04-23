@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/aidara/CHURN MLOPS/mlruns/492954484090795591/9ae7e2db5d0c4e87ad39daa8bc430534/artifacts
+end_time: 1776960878001
+entry_point_name: ''
+experiment_id: '492954484090795591'
+lifecycle_stage: active
+run_id: 9ae7e2db5d0c4e87ad39daa8bc430534
+run_name: REGISTER_BEST_MODEL
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1776960870690
+status: 3
+tags: []
+user_id: aidara
