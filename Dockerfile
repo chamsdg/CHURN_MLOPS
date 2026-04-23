@@ -1,25 +1,49 @@
 FROM python:3.10-slim
 
-# dossier de travail
+# =====================
+# ENV
+# =====================
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# =====================
+# WORKDIR
+# =====================
 WORKDIR /app
 
-# dépendances système (important pour lightgbm/xgboost)
+# =====================
+# SYSTEM DEPENDENCIES
+# =====================
 RUN apt-get update --fix-missing && \
     apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# copier requirements
+# =====================
+# INSTALL PYTHON DEPENDENCIES
+# =====================
 COPY requirements.txt .
 
-# installer dépendances
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# copier projet
+# =====================
+# COPY PROJECT
+# =====================
 COPY . .
 
-# exposer API
+# =====================
+# CREATE MODELS FOLDER (IMPORTANT)
+# =====================
+RUN mkdir -p models
+
+# =====================
+# EXPOSE API PORT
+# =====================
 EXPOSE 8000
 
-# lancer API
+# =====================
+# START API
+# =====================
 CMD ["uvicorn", "api.api:app", "--host", "0.0.0.0", "--port", "8000"]
