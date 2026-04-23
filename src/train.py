@@ -2,6 +2,7 @@ import os
 import joblib
 import mlflow
 import mlflow.sklearn
+from mlflow.tracking import MlflowClient
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score
@@ -13,10 +14,14 @@ from lightgbm import LGBMClassifier
 from src.preprocess import load_data, clean_data, encode_data, FEATURES
 
 # =====================
-# MLFLOW CONFIG PRO
+# MLFLOW CONFIG
 # =====================
 mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("churn_pro")
+
+client = MlflowClient()
+
+MODEL_NAME = "ChurnModel"
 
 # =====================
 # DATA
@@ -30,11 +35,17 @@ X = clean_data(X)
 X, encoders = encode_data(X, fit=True)
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
 )
 
 scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
 
+# =====================
+# MODELS
+# =====================
 models = {
     "LogisticRegression": LogisticRegression(max_iter=1000, class_weight="balanced"),
     "RandomForest": RandomForestClassifier(n_estimators=200, class_weight="balanced"),
@@ -54,13 +65,14 @@ models = {
 best_model = None
 best_name = None
 best_roc = -1
+best_run_id = None
 
 # =====================
-# TRAIN + LOG
+# TRAIN + TRACK
 # =====================
 for name, model in models.items():
 
-    with mlflow.start_run(run_name=name):
+    with mlflow.start_run(run_name=name) as run:
 
         model.fit(X_train, y_train)
 
@@ -80,23 +92,60 @@ for name, model in models.items():
             best_roc = roc
             best_model = model
             best_name = name
+            best_run_id = run.info.run_id
 
 # =====================
-# REGISTER MODEL (PRO STEP)
+# BEST MODEL INFO
 # =====================
-with mlflow.start_run(run_name="register_best"):
+print(f"\n🏆 Best model: {best_name} | ROC-AUC: {best_roc:.4f}")
 
-    mlflow.log_param("best_model", best_name)
-    mlflow.log_metric("best_roc", best_roc)
+# =====================
+# REGISTER MODEL
+# =====================
+model_uri = f"runs:/{best_run_id}/model"
 
-    mlflow.sklearn.log_model(
-        best_model,
-        "model",
-        registered_model_name="ChurnModel"
+result = mlflow.register_model(
+    model_uri,
+    MODEL_NAME
+)
+
+version = result.version
+
+print(f"📦 Registered model version: {version}")
+
+# =====================
+# STAGING AUTOMATION
+# =====================
+if best_roc > 0.80:   # threshold business rule
+
+    print("🚀 Promoting to STAGING...")
+
+    client.transition_model_version_stage(
+        name=MODEL_NAME,
+        version=version,
+        stage="Staging"
     )
 
+    print("✅ Model moved to Staging")
+
+    # OPTIONAL AUTO PROMOTION (business rule)
+    if best_roc > 0.85:
+
+        print("🔥 Promoting to PRODUCTION...")
+
+        client.transition_model_version_stage(
+            name=MODEL_NAME,
+            version=version,
+            stage="Production"
+        )
+
+        print("🚀 Model is now in Production")
+
+else:
+    print("⚠️ Model not good enough for staging")
+
 # =====================
-# SAVE LOCAL BUNDLE
+# LOCAL BACKUP (DOCKER SAFE)
 # =====================
 os.makedirs("models", exist_ok=True)
 
@@ -107,4 +156,4 @@ joblib.dump({
     "model_name": best_name
 }, "models/model_bundle.pkl")
 
-print("✅ PRO MODEL TRAINED + REGISTERED")
+print("✅ MLOps PRO pipeline completed")

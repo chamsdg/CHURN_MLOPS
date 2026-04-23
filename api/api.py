@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
 import logging
-import joblib
+import mlflow.pyfunc
 
 # =====================
 # APP
@@ -15,13 +15,23 @@ app = FastAPI()
 data = pd.read_csv("data/churn.csv")
 
 # =====================
-# LOAD BUNDLE (SAFE DOCKER WAY)
+# LOAD FEATURES + ENCODERS (LOCAL SAFE)
 # =====================
+import joblib
 bundle = joblib.load("models/model_bundle.pkl")
 
-model = bundle["model"]
 features = bundle["features"]
 label_encoders = bundle["encoders"]
+
+# =====================
+# LOAD MODEL FROM MLFLOW REGISTRY (PRO MODE)
+# =====================
+MODEL_NAME = "ChurnModel"
+MODEL_STAGE = "Production"
+
+model = mlflow.pyfunc.load_model(
+    f"models:/{MODEL_NAME}/{MODEL_STAGE}"
+)
 
 # =====================
 # LOGGING
@@ -39,7 +49,11 @@ class PredictionInput(BaseModel):
 # =====================
 @app.get("/health")
 def health():
-    return {"status": "API running (Docker safe mode)"}
+    return {
+        "status": "API running (MLflow Production mode)",
+        "model": MODEL_NAME,
+        "stage": MODEL_STAGE
+    }
 
 # =====================
 # PREDICT
@@ -60,8 +74,8 @@ def predict(input_data: PredictionInput):
         for col in label_encoders:
             df[col] = label_encoders[col].transform(df[col])
 
-        # prediction
-        proba = model.predict_proba(df)[0][1]
+        # prediction MLflow
+        proba = model.predict(df)[0]
 
         prediction = int(proba > 0.5)
 
@@ -77,7 +91,8 @@ def predict(input_data: PredictionInput):
             "CustomerId": input_data.CustomerId,
             "prediction": prediction,
             "probability": float(proba),
-            "risk": risk
+            "risk": risk,
+            "model_source": "mlflow_registry"
         }
 
     except Exception as e:
