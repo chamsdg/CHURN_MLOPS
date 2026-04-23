@@ -22,9 +22,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # ✅ FIX IMPORTANT (src import issue)
     - name: Run training
       run: |
-        python src/train.py
+        PYTHONPATH=. python src/train.py
 
     - name: Check model file
       run: |
