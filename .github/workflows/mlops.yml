@@ -1,44 +1,41 @@
-name: MLOps CI Pipeline
+name: MLOps PRO Pipeline
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
-  train-model:
+  train:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 
-    - name: Install dependencies
+    - name: Install deps
       run: |
-        python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # ✅ FIX IMPORTANT (src import issue)
-    - name: Run training
+    - name: Train model
       run: |
         PYTHONPATH=. python src/train.py
 
-    - name: Check model file
-      run: |
-        ls models || echo "No models folder"
+    - name: Upload MLflow artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mlruns
+        path: mlruns/
 
-  build-docker:
-    needs: train-model
+  docker:
+    needs: train
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Build Docker image
+    - name: Build Docker
       run: |
         docker build -t churn-api .
